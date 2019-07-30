@@ -1,0 +1,701 @@
+<head>
+<title>Page Title</title>
+</head>
+<style>
+.node {
+    cursor: pointer;
+}
+
+.node text {
+    font: 10px Proxima Nova;
+}
+.link {
+    fill: none;
+    stroke-width: 2px;
+}
+
+body {
+    overflow: hidden;
+}
+
+/* Tooltip css */
+
+.customTooltip-wrapper {
+  opacity: 0;
+  /* NEW */
+  display: none;
+  position: absolute;
+}
+
+.customTooltip {
+  background: #eee;
+  box-shadow: 0 0 5px #999999;
+  color: #333;
+  position: absolute;
+  font-size: 12px;
+  left: 130px;
+  padding: 5px;
+  text-align: center;
+  top: 95px;
+  width: 350px;
+  z-index: 10;
+  text-align: left;
+}
+
+.tooltip-desc,
+.tooltip-image-wrapper {
+  display: inline-block;
+  float: left;
+}
+
+.tooltip-desc {
+  padding-left: 10px;
+  margin-top: -10px;
+  overflow: auto;
+}
+
+.tooltip-desc h4 {
+  text-decoration: none;
+  color: black;
+  margin-bottom: 2px;
+  margin-top: 14px;
+}
+
+.tooltip-desc .name {
+  color: RoyalBlue;
+  margin-bottom: 2px;
+  margin-top: 14px;
+}
+
+.tooltip-desc .tags-wrapper .title {
+  display: inline-block;
+  float: left;
+}
+
+.tooltip-desc .tags-wrapper .tags {
+  display: inline-block;
+  float: left;
+}
+
+/* SVG */
+text{
+  fill:dimgray;
+}
+
+
+/*Just to ensure the select2 box is "glued" to the top*/
+  .search {
+    width: 100%;
+  }
+
+</style>
+<body>
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+
+  <clipPath id="clip">
+          <circle cx="0" cy="0" r="20"/>
+      </clipPath>
+
+<script>
+
+
+var margin = {
+    top: 20,
+    right: 120,
+    bottom: 20,
+    left: 120
+  },
+  width = 960 - margin.right - margin.left,
+  height = 800 - margin.top - margin.bottom;
+
+
+
+var root = {
+  "name": "Leah Devling",
+  "imageUrl": "https://i.pinimg.com/236x/d8/82/59/d88259a42fcc6ee481c879e05b5ff465--business-headshot-ideas-woman-profile-picture-professional.jpg",
+  "area": "Corporate",
+  "profileUrl": "'example.com",
+  "office": "CTO office",
+  "tags": "Ceo,tag1,manager,cto",
+  "positionName": "Cheaf Executive Officer ",
+  "children": [{
+    "name": "Davolio Nancy",
+    "imageUrl": "https://www.catleylakeman.co.uk/assets/img/CATLEY_LAKEMAN-Russell.jpg",
+    "area": "Corporate",
+    "profileUrl": "'example.com",
+    "office": "CEO office",
+    "tags": "Ceo,tag1, tag2",
+    "positionName": "CTO ",
+    "children": [{
+      "name": "Fuller Andrew",
+      "imageUrl": "https://www.fixdapp.com/wp-content/uploads/2018/04/Picture-of-person.png?x61228",
+      "area": "Corporate",
+      "profileUrl": "'example.com",
+      "office": "CEO office",
+      "tags": "Ceo,tag1, tag2",
+      "positionName": "Linear Manager"
+    }, {
+      "name": "Charlotte Cooper",
+      "imageUrl": "https://engineering.unl.edu/images/staff/Kayla_Person-small.jpg",
+      "area": "Corporate",
+      "profileUrl": "'example.com",
+      "office": "CEO office",
+      "tags": "Ceo,tag1, tag2",
+      "positionName": "Senior Trader",
+      "children": [{
+        "name": "Tyler Fung",
+        "imageUrl": "http://www.clker.com/cliparts/J/p/d/V/c/U/man-topgun-head.svg",
+        "area": "Corporate",
+        "profileUrl": "'example.com",
+        "office": "CEO office",
+        "tags": "Ceo,tag1, tag2",
+        "positionName": "Intern"
+      }]
+    }, {
+      "name": "Yoshi Nagase",
+      "imageUrl": "https://qph.fs.quoracdn.net/main-qimg-f243097c3e32e5c6ef4df3aebf1fb1ea.webp",
+      "area": "Corporate",
+      "profileUrl": "'example.com",
+      "office": "CEO office",
+      "tags": "Ceo,tag1, tag2",
+      "positionName": "Head of laboratory",
+      "children": [{
+        "name": "Valle Saavedra",
+        "imageUrl": "https://image.shutterstock.com/image-photo/pretty-smiling-joyfully-female-fair-260nw-776697943.jpg",
+        "area": "Corporate",
+        "profileUrl": "'example.com",
+        "office": "CEO office",
+        "tags": "Ceo,tag1, tag2",
+        "positionName": "Junior Inovator"
+      }, {
+        "name": "Melanie Palette",
+        "imageUrl": "https://tribzap2it.files.wordpress.com/2015/07/person-of-interest-season-4-sarah-shahi-cbs.jpg",
+        "area": "Corporate",
+        "profileUrl": "'example.com",
+        "office": "CEO office",
+        "tags": "Ceo,tag1, tag2",
+        "positionName": "System analyst"
+      }]
+    }]
+  }, {
+    "name": " Katie Janet",
+    "imageUrl": "https://gpluseurope.com/wp-content/uploads/AMANDAORZA-300x300.jpg",
+    "area": "Corporate",
+    "profileUrl": "'example.com",
+    "office": "CEO office",
+    "tags": "Ceo,tag1, tag2",
+    "positionName": "CTO ",
+    "children": [{
+      "name": "Peter Wilson",
+      "imageUrl": "https://static01.nyt.com/images/2017/01/12/well/move/adam-bryant-headshot/adam-bryant-headshot-square320-v2.jpg",
+      "area": "Corporate",
+      "profileUrl": "'example.com",
+      "office": "CEO office",
+      "tags": "Ceo,tag1, tag2",
+      "positionName": "Head of channels",
+      "children": [{
+        "name": " Lars Peterson",
+        "imageUrl": "https://richlitvin.com/wp-content/uploads/bb-plugin/cache/Rich-Litvin-headshot-portrait.png",
+        "area": "Corporate",
+        "profileUrl": "'example.com",
+        "office": "CEO office",
+        "tags": "Ceo,tag1, tag2",
+        "positionName": "Anakyst Developer"
+      }]
+    }, {
+      "name": "Carlos Diaz",
+      "imageUrl": "https://secure.gravatar.com/avatar/4eefbefad0d5734d6d06a16627abc455?s=400&d=mm&r=g",
+      "area": "Corporate",
+      "profileUrl": "'example.com",
+      "office": "CEO office",
+      "tags": "Ceo,tag1, tag2",
+      "positionName": "Senior Android Developer",
+      "children": [{
+        "name": " Petra Winkler",
+        "imageUrl": "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+        "area": "Corporate",
+        "profileUrl": "'example.com",
+        "office": "CEO office",
+        "tags": "Ceo,tag1, tag2",
+        "positionName": "Android Developer"
+      }, {
+        "name": "Martin Bein",
+        "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTg5nU0ZDqdUjuQqpLWPj2zr2buYvIqf23tlxB-yQ4fVQfCbWUlwQ",
+        "area": "Corporate",
+        "profileUrl": "'example.com",
+        "office": "CEO office",
+        "tags": "Ceo,tag1, tag2",
+        "positionName": "Ios Developer",
+        "size": 2023
+      }]
+    }, {
+      "name": "Allie Petersen",
+      "imageUrl": "https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+      "area": "Corporate",
+      "profileUrl": "'example.com",
+      "office": "CEO office",
+      "tags": "Ceo,tag1, tag2",
+      "positionName": "Senior Developer",
+      "children": [{
+        "name": "Morgan Len",
+        "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvnsvq9CnRd--4Bg4mjcjJtA_kEUraWbg0OD_Ot54SZxCv4RZ-",
+        "area": "Corporate",
+        "profileUrl": "'example.com",
+        "office": "CEO office",
+        "tags": "Ceo,tag1, tag2",
+        "positionName": "Web Developer"
+      }, {
+        "name": "Leah Vileid",
+        "imageUrl": "https://pmcvariety.files.wordpress.com/2018/04/rachel-adler.jpg?w=700",
+        "area": "Corporate",
+        "profileUrl": "'example.com",
+        "office": "CEO office",
+        "tags": "Ceo,tag1, tag2",
+        "positionName": "Junior Developer"
+      }]
+    }]
+  }]
+}
+var i = 0;
+  duration = 750,
+  rectW = 200,
+  rectH = 200;
+
+var tree = d3.layout.tree().nodeSize([rectW + 20]);
+
+var nodeList = tree.nodes(root.children[0]);
+var node1 = tree.nodes(root.children[1]);
+
+    // Returns a list of all nodes under the root.
+    function flatten(root) {
+      var nodes = [],
+        i = i++;
+
+      function recurse(node) {
+        if (node.children) node.children.forEach(recurse);
+        if (node._children) node._children.forEach(recurse);
+        if (!node.id) node.id = ++i;
+        nodes.push(node);
+      }
+
+      recurse(root);
+      return nodes;
+    }
+    function doReset(){
+        flatten(root).forEach(function(d) {
+          d.color = undefined;
+          //collpase function
+           if (d.children) {
+    d._children = d.children;
+    d.children = null;
+  }
+       
+        })
+        update(root);      
+    }
+    var select = d3.select("body")
+      .append("select")
+      .style("box-shadow", "2px 2px 5px black")
+      .style("border-radius", "5px")
+      .style("padding", "15px")
+      .style("position", "absolute")
+      .style("top", "0")
+      .style("right", "70")
+      .on("change", function() {
+        
+        var select = d3.select("select").node().value;
+        
+        if (select == "Select"){
+          doReset();
+          return;
+        }
+        var find = flatten(root).find(function(d) {
+          if (d.name == select)
+            return true;
+     
+        });
+        doReset()
+        //expand function
+           while (find.parent) {
+          find.color = "red";
+          find = find.parent;
+    if (!find.children) {
+      find.children = find._children;
+      find._children = null;
+    }
+
+  }
+          
+        update(find)
+      });
+
+
+    select.append("option")
+      .attr("value", "Select")
+      .attr("selected", "true")
+      .text("Select");
+
+    nodeList.forEach(function(d) {
+
+      select.append("option")
+        .attr("value", d.name)
+        .text(d.name);
+
+    });
+    
+     node1.forEach(function(d) {
+
+      select.append("option")
+        .attr("value", d.name)
+        .text(d.name);
+
+    });
+    
+   
+
+    d3.select("body").append("button")
+      .text("Reset")
+      .style("background-color", "rgb(1, 159, 198)")
+      .style("border-radius", "5px")
+      .style("box-shadow", "2px 2px 5px black")
+      .style("padding", "15px")
+      .style("position", "absolute")
+      .style("top", "0")
+      .style("right", "0")
+      .on("click", function(){
+        d3.select("select").node().value = "Select";
+        doReset();
+      });
+
+   
+var svg = d3.select("body")
+  .append("svg")
+  .attr("width", window.innerWidth)
+  .attr("height", window.innerHeight)
+  .call(zm = d3.behavior.zoom().scaleExtent([0.05, 3]).on("zoom", redraw))
+  .append("g")
+  .attr("transform", "translate(" + window.innerWidth / 2 + "," + 20 + ")");
+
+
+//necessary so that zoom knows where to zoom and unzoom from
+zm.translate([window.innerWidth / 2, 20]);
+
+root.x0 = 0;
+root.y0 = height / 2;
+
+function collapse(d) {
+  if (d.children) {
+    d._children = d.children;
+    d._children.forEach(collapse);
+    d.children = null;
+  }
+}
+
+root.children.forEach(collapse);
+
+update(root);
+
+d3.select("#body").style("height", "800px");
+
+var tooltip = d3.select('body')
+  .append('div')
+  .attr('class', 'customTooltip-wrapper');
+
+function update(source, centerMySelf) {
+
+  // Compute the new tree layout.
+  var nodes = tree.nodes(root).reverse(),
+    links = tree.links(nodes);
+    
+    
+
+  // Normalize for fixed-depth.
+  nodes.forEach(function(d) {
+    d.y = d.depth * 350;
+  });
+
+  // Update the nodes…
+  var node = svg.selectAll("g.node")
+    .data(nodes, function(d) {
+      return d.id || (d.id = ++i);
+    });
+
+  // Enter any new nodes at the parent's previous position.
+  var nodeEnter = node.enter().append("g")
+    .attr("class", "node")
+    .attr("transform", function(d) {
+      return "translate(" + source.x0 + "," + source.y0 + ")";
+    })
+    .on("click", click);
+
+  nodeEnter.append("rect")
+    .attr("rx", 15)
+    .attr("ry", 15)
+    .attr("stroke", "gray")
+    .attr("stroke-width", 1)
+    .style("fill", function(d) {
+      return d._children ? "lightsteelblue" : "#fff";
+    });
+
+  nodeEnter.append("text")
+    .style("font-size","20px")
+    .attr("x", rectH * 2 / 4 + 5)
+    .attr("y", 10)
+    .attr("dy", 130)
+    .attr("text-anchor", "middle")
+    .text(function(d) {
+      return d.name;
+    });
+
+  nodeEnter.append("text")
+    .style("font-size","20px")
+    .attr("x", rectH * 2 / 4 + 5)
+    .attr("y", rectH - 10)
+    .attr("dy", ".100em")
+    .attr("text-anchor", "middle")
+    .text(function(d) {
+      return d.area;
+    });
+
+  nodeEnter.append("text")
+    .style("font-size","20px")
+    .attr("x", rectH * 2 / 4 + 5)
+    .attr("y", 160)
+    .attr("dy", ".35em")
+    .attr("text-anchor", "middle")
+    .text(function(d) {
+      return d.positionName;
+    });
+    
+    
+  nodeEnter.append("svg:image")
+    .attr('x', 60)
+    .attr('y', -40)
+    .attr("text-anchor", "top")
+    .attr('width', rectH * 40 / 100)
+    .attr('height', rectH)
+    .attr("xlink:href", function(v) {
+      return v.imageUrl;
+    })
+
+  // Transition nodes to their new position.
+  var nodeUpdate = node.transition()
+    .duration(duration)
+    .attr("transform", function(d) {
+      return "translate(" + d.x + "," + d.y + ")";
+    });
+
+  nodeUpdate.select("rect")
+    .attr("width", rectW)
+    .attr("height", rectH)
+    .style("fill", function(d) {
+      return d._children ? "lightblue" : "Gold";
+    });
+
+  nodeUpdate.select("text")
+    .style("fill-opacity", 1);
+
+  // Transition exiting nodes to the parent's new position.
+  var nodeExit = node.exit().transition()
+    .duration(duration)
+    .attr("transform", function(d) {
+      return "translate(" + source.x + "," + source.y + ")";
+    })
+    .remove();
+
+  nodeExit.select("rect")
+    .attr("width", rectW)
+    .attr("height", rectH)
+    .attr("stroke", "black");
+
+  nodeExit.select("text");
+
+  // Update the links…
+  var link = svg.selectAll("path.link")
+    .data(links, function(d) {
+      return d.target.id;
+    });
+
+  // Enter any new links at the parent's previous position.
+  link.enter().insert("path", "g")
+    .attr("class", "link")
+    .attr("x", rectW / 2)
+    .attr("y", rectH / 2)
+    .attr("d", function(d) {
+      var o = {
+        x: source.x0,
+        y: source.y0
+      };
+      return turningLines({
+        source: o,
+        target: o
+      });
+    });
+    
+   //Color indicator for search function 
+   d3.selectAll("path").style("stroke", function(d) {
+
+          if (d.target.color) {
+            return d.target.color
+          } else {
+            return "gray"
+          }
+        })
+
+  // Transition links to their new position.
+  link.transition()
+    .duration(duration)
+    .attr("d", lines);
+
+  // Transition exiting nodes to the parent's new position.
+  link.exit().transition()
+    .duration(duration)
+    .attr("d", function(d) {
+      var o = {
+        x: source.x,
+        y: source.y
+      };
+      return turningLines({
+        source: o,
+        target: o
+      });
+    })
+    .remove();
+
+  // Stash the old positions for transition.
+  nodes.forEach(function(d) {
+    d.x0 = d.x;
+    d.y0 = d.y;
+  });
+
+  if (centerMySelf) {
+    var x;
+    var y;
+
+    nodes.forEach(function(d) {
+      if (d.isLoggedUser) {
+        x = d.x;
+        y = d.y;
+      }
+
+    });
+
+  }
+
+  /*################  TOOLTIP  ############################# This is the function that shows a zoomed in      picture of the nodes*/
+
+  function getTagsFromCommaSeparatedStrings(tags){
+    debugger;
+   return tags.split(',').map(function(v){ return   '<li><div class="tag">'+v+'</div></li>  ' }).join('');
+  }
+  function tooltipContent(params) {
+    
+    return '   <a class="customTooltip" href="'+params.profileUrl+'" target="_blank" >  ' +
+    '     <div class="tooltip-image-wrapper"> <img width="100" height="140" src="' + params.imageUrl + '">  ' +
+      '     </div>  ' +
+      '     <div class="tooltip-desc">  ' +
+      '       /*<h4 class="position">'+params.positionName+'</h4>  ' +
+      '       <h4 class="area">'+params.area+' </h4>  ' +
+      '       <h3 class="name"> '+params.name+' <h3>   ' +
+      '       <h4 class="office">'+params.office+'</h4>  ' +
+      '         <h4 class="tags-wrapper">  ' +
+      '       </h4>  ' +
+      '     </div>  ' +
+      '  </a>  ';
+  }
+
+  function tooltipHoverHandler(d) {
+
+    tooltip.html(tooltipContent(d));
+
+    tooltip.transition()
+      .duration(200).style("opacity", "1").style('display', 'block');
+    d3.select(this).attr('cursor', 'pointer').attr("stroke-width", 50);
+    
+     var y = d3.event.pageY;
+      var x = d3.event.pageX;
+      if(y<220){
+        y+=220-y; 
+        x+=130;
+      } 
+      console.log(y);
+      tooltip.style('top', (y - 300) + 'px')
+        .style('left', (x - 200) + 'px');
+  }
+
+  function tooltipOutHandler() {
+    tooltip.transition()
+      .duration(200)
+      .style('opacity', '0').style('display', 'none');
+    d3.select(this).attr("stroke-width", 5);
+  }
+  
+    nodeEnter.on('mousemove', tooltipHoverHandler);
+
+    nodeEnter.on('mouseover', tooltipOutHandler);
+
+    function equalToEventTarget() {
+      return this == d3.event.target;
+    }
+
+    d3.select("body").on("mousemove", function() {
+      var outside = tooltip.filter(equalToEventTarget).empty();
+      if (outside) {
+        tooltip.style('opacity', '0').style('display', 'none');
+      }
+    });
+
+ 
+}
+
+// Toggle children on click.
+function click(d) {
+
+
+  if (d.children) {
+    d._children = d.children;
+    d.children = null;
+  } else {
+    d.children = d._children;
+    d._children = null;
+  }
+  update(d);
+
+}
+
+//########################################################
+
+//Redraw for zoom
+function redraw() {
+  //console.log("here", d3.event.translate, d3.event.scale);
+  svg.attr("transform",
+    "translate(" + d3.event.translate + ")" +
+    " scale(" + d3.event.scale + ")");
+}
+
+function lines(d) {
+  var sourceX = d.source.x,
+      sourceY = d.source.y + (rectH / 2),
+      targetX = d.target.x,
+      targetY = d.target.y + (rectW / 4);
+      
+  return "M" + sourceX + "," + sourceY
+    + "V" + (sourceY + (targetY - sourceY)/2)
+    + "H" + targetX 
+    + "V" + targetY;
+}
+/**
+ * Use a different elbow function for enter
+ * and exit nodes. This is necessary because
+ * the function above assumes that the nodes
+ * are stationary along the x axis.
+ */
+function turningLines(d){
+  return "M" + d.source.y + "," + d.source.x
+    + "V" + d.source.y
+    + "H" + d.source.x 
+    + "V" + d.source.y;
+}
+
+</script>
+</body>
