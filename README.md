@@ -1,13 +1,11 @@
 PURPOSE: Front end project that uses d3 javascript to create a organization chart.
 
-This is a ues to grab months, days and years from a generated calander. Also introduced me to ajax. Link to calander is below. Note it is not fully complete and there are some minor styling issures
+This is a organization tree that uses d3 javascript to read a JSON file. It created a website that represents the data in the JSON file into a tree that has a search down menu. This taught me alot about d3 javascript which is used to represent data in a visualized fassion. Link to the website is below or visit my website at 
 
-https://fungt1.github.io/Calendar/
+https://fungt1.github.io/OrgChart/
 
-Langauges being used: Html,css,javascript
+Langauges being used: Html,css, javascript
 
-CSS frameworks: bootstrap, font-awsome
+Javascript library: ajax, d3.
 
-Javascript library: jQuery.
-
-Helpful links: https://jquery.com/ jQuery https://getbootstrap.com/ bootstrap extensions https://fontawesome.com/ font awsome https://kenwheeler.github.io/slick/ slick
+Helpful links: https://jquery.com/ jQuery https://d3js.org/ d3 javascript https://learn.jquery.com/ajax/ ajax learning tool
